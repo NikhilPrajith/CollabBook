@@ -1,0 +1,96 @@
+/* Base editor styles */
+.codex-editor {
+  width: 100% !important;
+  margin: 0 auto;
+  font-family: "Georgia", serif;
+}
+
+/* Typography */
+.ce-block__content {
+  width: 100% !important;
+  margin: 0;
+  max-width: none !important;
+}
+
+.ce-toolbar__content {
+  width: 100% !important;
+  max-width: none !important;
+}
+
+.ce-paragraph {
+  line-height: 1;
+  color: inherit;
+}
+
+/* Headings */
+.ce-header {
+  font-family: inherit;
+  margin-top: 2.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+h1.ce-header {
+  font-size: 2.5rem;
+  line-height: 1.2;
+}
+
+h2.ce-header {
+  font-size: 2rem;
+  line-height: 1.3;
+}
+
+h3.ce-header {
+  font-size: 1.5rem;
+  line-height: 1.4;
+}
+
+/* Chapter Break */
+.chapter-break {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin: 3rem auto;
+  text-align: center;
+  width: 100%;
+}
+
+.chapter-break-line {
+  width: 100%;
+  max-width: 200px;
+  height: 1px;
+  background: theme('colors.border');
+}
+
+.chapter-break-text {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: theme('colors.muted.foreground');
+}
+
+/* Plus button and toolbar */
+.ce-toolbar__plus {
+  color: theme('colors.muted.foreground');
+}
+
+.ce-toolbar__plus:hover {
+  background-color: theme('colors.accent.DEFAULT');
+  color: theme('colors.accent.foreground');
+}
+
+.ce-popover {
+  background-color: theme('colors.background');
+  border: 1px solid theme('colors.border');
+  border-radius: theme('borderRadius.md');
+  box-shadow: theme('boxShadow.md');
+}
+
+.ce-popover-item {
+  color: theme('colors.foreground');
+}
+
+.ce-popover-item:hover {
+  background-color: theme('colors.accent.DEFAULT');
+  color: theme('colors.accent.foreground');
+}

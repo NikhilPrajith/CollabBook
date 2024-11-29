@@ -1,70 +1,71 @@
-import DeployButton from "@/components/deploy-button";
-import { EnvVarWarning } from "@/components/env-var-warning";
-import HeaderAuth from "@/components/header-auth";
-import { ThemeSwitcher } from "@/components/theme-switcher";
-import { hasEnvVars } from "@/utils/supabase/check-env-vars";
+import type { Metadata } from "next";
+import { GoogleTagManager } from '@next/third-parties/google'
+import { ThemeProvider } from "@/components/theme-provider";
+import { Navbar } from "@/components/navigation/navbar";
 import { GeistSans } from "geist/font/sans";
-import { ThemeProvider } from "next-themes";
-import Link from "next/link";
+import { GeistMono } from "geist/font/mono";
+import { Footer } from "@/components/navigation/footer";
+import { Settings } from "@/lib/meta";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const baseUrl = Settings.metadataBase;
 
-export const metadata = {
-  metadataBase: new URL(defaultUrl),
-  title: "Next.js and Supabase Starter Kit",
-  description: "The fastest way to build apps with Next.js and Supabase",
+export const metadata: Metadata = {
+  title: Settings.title,
+  metadataBase: new URL(baseUrl),
+  description: Settings.description,
+  keywords: Settings.keywords,
+  openGraph: {
+    type: Settings.openGraph.type,
+    url: baseUrl,
+    title: Settings.openGraph.title,
+    description: Settings.openGraph.description,
+    siteName: Settings.openGraph.siteName,
+    images: Settings.openGraph.images.map((image: { url: string; alt: string }) => ({
+      ...image,
+      url: `${baseUrl}${image.url}`,
+    })),
+  },
+  twitter: {
+    card: Settings.twitter.card,
+    title: Settings.twitter.title,
+    description: Settings.twitter.description,
+    site: Settings.twitter.site,
+    images: Settings.twitter.images.map((image: { url: string; alt: string }) => ({
+      ...image,
+      url: `${baseUrl}${image.url}`,
+    })),
+  },
+  alternates: {
+    canonical: baseUrl,
+  },
 };
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
-    <html lang="en" className={GeistSans.className} suppressHydrationWarning>
-      <body className="bg-background text-foreground">
+    <html lang="en" suppressHydrationWarning>
+      { Settings.gtmconnected && (
+        <GoogleTagManager gtmId={Settings.gtm} />
+      )}
+      <body
+        className={`${GeistSans.variable} ${GeistMono.variable} font-regular`}
+        suppressHydrationWarning
+      >
         <ThemeProvider
           attribute="class"
           defaultTheme="system"
           enableSystem
           disableTransitionOnChange
         >
-          <main className="min-h-screen flex flex-col items-center">
-            <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <Link href={"/"}>Next.js Supabase Starter</Link>
-                    <div className="flex items-center gap-2">
-                      <DeployButton />
-                    </div>
-                  </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
-              </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
-                {children}
-              </div>
-
-              <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <p>
-                  Powered by{" "}
-                  <a
-                    href="https://supabase.com/?utm_source=create-next-app&utm_medium=template&utm_term=nextjs"
-                    target="_blank"
-                    className="font-bold hover:underline"
-                    rel="noreferrer"
-                  >
-                    Supabase
-                  </a>
-                </p>
-                <ThemeSwitcher />
-              </footer>
-            </div>
+          <Navbar />
+          <main className="h-auto">
+            {children}
           </main>
+          <Footer />
         </ThemeProvider>
       </body>
     </html>
