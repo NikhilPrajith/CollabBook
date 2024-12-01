@@ -2,12 +2,15 @@
 
 export const Navigations = [
   {
-    title: "Docs",
-    href: `/`,
-  },
-  {
     title: "Home",
     href: "/",
-    external: false,
-  }
+  },
+  {
+    title: "Dashboard",
+    href: "/dashboard",
+  },
+  {
+    title: "Docs",
+    href: "/docs",
+  },
 ];

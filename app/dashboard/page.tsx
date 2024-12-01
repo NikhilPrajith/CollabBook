@@ -1,4 +1,3 @@
-
 import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
@@ -71,7 +70,12 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4">
-      <h1 className="text-3xl font-bold text-center my-8">New & Trending</h1>
+      <div className="flex justify-between items-center mb-8">
+        <h1 className="text-3xl font-bold">Dashboard</h1>
+        <Button onClick={createPost} className="px-8 py-4">
+          Create New Post
+        </Button>
+      </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
         {books.map((book: Book) => {
@@ -80,7 +84,7 @@ export default async function HomePage() {
           const starDisplay = "★".repeat(filledStars) + "☆".repeat(emptyStars);
 
           return (
-            <div key={book.id} className="bg-white rounded-xs p-4 flex">
+            <div key={book.id} className="rounded-xs p-4 flex">
               {/* Book Image */}
                 <div className="relative w-[100px] h-[150px] perspective-1000">
                     <div className="w-[100px] h-[150px] bg-gray-200 shadow-[10px_10px_20px_rgba(0,0,0,0.3),-5px_-5px_15px_rgba(0,0,0,0.1)] transform rotate-y-[15deg] rotate-x-[5deg] rounded-[4px]">
@@ -92,7 +96,7 @@ export default async function HomePage() {
                             :
                         <div 
                         className={`${colors[Math.floor(Math.random() * colors.length)]} w-[100px] h-[150px] font-serif rounded-[4px] object-cover text-xs`}>
-                            <div className="font-semibold p-4">{book.title}</div>
+                            <div className="font-semibold p-4 text-black">{book.title}</div>
                         </div>}
                     </div>
                     <div className="absolute top-0 left-0 w-[2.5px] h-full bg-gray-500 rounded-l-[4px]"></div>
@@ -118,15 +122,6 @@ export default async function HomePage() {
             </div>
           );
         })}
-      </div>
-      
-
-      <div className="mt-12 text-center">
-        <form action={createPost}>
-          <Button type="submit" className="px-8 py-4">
-            Create New Post
-          </Button>
-        </form>
       </div>
     </div>
   );

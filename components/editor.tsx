@@ -15,7 +15,6 @@ import { Icons } from "./icons"
 import ChapterBreak from "./editor/tools/chapter-break"
 import { useToast } from "@/hooks/use-toast"
 
-
 interface EditorProps {
   post: {
     id: string
@@ -23,10 +22,13 @@ interface EditorProps {
     content: any
     published: boolean
   }
+  onTitleChange: (title: string) => void
+  onSubmit: (e: React.FormEvent) => void
+  ref: React.RefObject<EditorJS>
 }
 
-export function Editor({ post }: EditorProps, onTitleChange: (title: string) => void) {
-  const ref = React.useRef<EditorJS>()
+export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
+  //const ref = React.useRef<EditorJS>()
   const router = useRouter()
   const [isSaving, setIsSaving] = React.useState<boolean>(false)
   const [isMounted, setIsMounted] = React.useState<boolean>(false)
@@ -145,6 +147,11 @@ export function Editor({ post }: EditorProps, onTitleChange: (title: string) => 
     }
   }, [post.content])
 
+  const handleTitleChange = (newTitle: string) => {
+    setTitle(newTitle);
+    onTitleChange(newTitle);
+  }
+
   React.useEffect(() => {
     if (typeof window !== "undefined") {
       setIsMounted(true)
@@ -162,80 +169,22 @@ export function Editor({ post }: EditorProps, onTitleChange: (title: string) => 
     }
   }, [isMounted, initializeEditor])
 
-  async function onSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    setIsSaving(true)
-
-    try {
-      const blocks = await ref.current?.save()
-      const supabase = createClient()
-
-      const { error } = await supabase
-        .from('posts')
-        .update({ 
-          title,
-          content: blocks,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', post.id)
-
-      if (error) throw error
-
-      toast({
-        title: "Success",
-        description: "Your post has been saved.",
-        variant: "success",
-      })
-      
-      router.refresh()
-    } catch (error) {
-      toast({
-        title: "Error",
-        description: "Your post was not saved. Please try again.",
-        variant: "destructive",
-      })
-    } finally {
-      setIsSaving(false)
-    }
-  }
-
   if (!isMounted) {
     return null
   }
 
   return (
-    <form onSubmit={onSubmit}>
-      <div className="grid w-auto gap-10 m-5">
-        <div className="flex w-full items-center justify-between">
-          <div className="flex items-center space-x-10">
-            <Link
-              href="/"
-              className={cn(buttonVariants({ variant: "ghost" }))}
-            >
-              <>
-                <Icons.chevronLeft className="mr-2 h-4 w-4" />
-                Back
-              </>
-            </Link>
-          </div>
-          <button type="submit" className={cn(buttonVariants())}>
-            {isSaving && (
-              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            <span>Save</span>
-          </button>
-        </div>
+  <>
         <div className="prose prose-stone mx-auto w-full max-w-[800px] dark:prose-invert">
           <TextareaAutosize
             autoFocus
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => handleTitleChange(e.target.value)}
             placeholder="Title"
             className="w-full text-center resize-y appearance-none bg-transparent text-5xl font-bold focus:outline-none"
           />
           <div id="editor" className="min-h-[500px]" />
         </div>
-      </div>
-    </form>
+      </>
   )
 }

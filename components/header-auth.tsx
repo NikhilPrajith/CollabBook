@@ -4,6 +4,16 @@ import Link from "next/link";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { createClient } from "@/utils/supabase/server";
+import {
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSeparator,
+  MenubarShortcut,
+  MenubarTrigger,
+} from "@/components/ui/menubar";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 
 export default async function AuthButton() {
   const supabase = await createClient();
@@ -50,12 +60,32 @@ export default async function AuthButton() {
   }
   return user ? (
     <div className="flex items-center gap-4">
-      Hey, {user.email}!
-      <form action={signOutAction}>
-        <Button type="submit" variant={"outline"}>
-          Sign out
-        </Button>
-      </form>
+      <Menubar className="border-none">
+        <MenubarMenu>
+          <MenubarTrigger>
+            <Avatar className="rounded-full overflow-hidden">
+              <AvatarImage src="https://github.com/shadcn.png" />
+              <AvatarFallback>CN</AvatarFallback>
+            </Avatar>
+          </MenubarTrigger>
+          <MenubarContent align="end">
+            {/* "Hey" and trimmed email */}
+            <div className="px-2 py-2 text-sm text-gray-700">
+              <span>Hey,</span>
+              <br />
+              <span className="font-medium">
+                {user.email && user.email.split("@")[0]}
+              </span>
+            </div>
+            <MenubarSeparator />
+            <MenubarItem asChild>
+              <Link href="/dashboard">Dashbaord</Link>
+            </MenubarItem>
+            <MenubarSeparator />
+            <MenubarItem onClick={signOutAction}>Sign out</MenubarItem>
+          </MenubarContent>
+        </MenubarMenu>
+      </Menubar>
     </div>
   ) : (
     <div className="flex gap-2">

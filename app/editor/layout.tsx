@@ -4,7 +4,7 @@ interface EditorProps {
 
 export default function EditorLayout({ children }: EditorProps) {
   return (
-    <div className="h-[calc(100vh-4rem)] flex">
+    <div className="h-[calc(100svh)] flex">
       {children}
     </div>
   )

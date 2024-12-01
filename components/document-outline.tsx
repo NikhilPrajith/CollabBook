@@ -1,10 +1,24 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { ChevronDown } from "lucide-react"
+import { ChevronRight, type LucideIcon } from "lucide-react"
+import EditorJS from "@editorjs/editorjs"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible"
-import { cn } from "@/lib/utils"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible"
+import {
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+} from "@/components/ui/sidebar"
 
 interface HeadingItem {
   id: string
@@ -21,47 +35,39 @@ interface HeadingProps {
 
 const HeadingNode: React.FC<HeadingProps> = ({ heading, onSelect }) => {
   const [isOpen, setIsOpen] = useState(true)
-  const hasChildren = heading.children.length > 0
   
   return (
     <Collapsible
       open={isOpen}
       onOpenChange={setIsOpen}
-      className={cn(
-        "w-auto",
-        heading.level > 1 && "ml-4"
-      )}
+      className="group/collapsible"
     >
-      <div className="flex items-center w-full">
-        <CollapsibleTrigger className="flex items-center gap-2 py-1.5 px-2 hover:bg-accent hover:text-accent-foreground rounded-md w-[-webkit-fill-available]">
-          <ChevronDown className={cn(
-            "h-4 w-4 shrink-0 transition-transform duration-200",
-            !isOpen && "-rotate-90"
-          )} />
-          <span className="truncate font-semibold text-sm">{heading.text}</span>
+      <SidebarMenuItem>
+        <CollapsibleTrigger asChild>
+          <SidebarMenuButton tooltip={heading.text}>
+            <span className="truncate font-semibold text-sm">{heading.text}</span>
+            <ChevronRight className="ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90" />
+          </SidebarMenuButton>
         </CollapsibleTrigger>
-      </div>
-      
-      <CollapsibleContent>
-        <button
-          onClick={() => onSelect('test')}
-          className="flex items-center gap-2 py-1.5 px-2 hover:bg-accent hover:text-accent-foreground rounded-md w-[-webkit-fill-available] ml-6"
-        >
-          <span className="truncate text-sm text-muted-foreground">Test</span>
-        </button>
-        {heading.children.map((child) => (
-          <HeadingNode 
-            key={child.id} 
-            heading={child} 
-            onSelect={onSelect}
-          />
-        ))}
-      </CollapsibleContent>
+        <CollapsibleContent>
+          <SidebarMenuSub>
+            {heading.children.map((child) => (
+              <SidebarMenuSubItem key={child.id}>
+                <SidebarMenuSubButton asChild>
+                  <span onClick={() => onSelect(child.id)} className="cursor-pointer">
+                    {child.text}
+                  </span>
+                </SidebarMenuSubButton>
+              </SidebarMenuSubItem>
+            ))}
+          </SidebarMenuSub>
+        </CollapsibleContent>
+      </SidebarMenuItem>
     </Collapsible>
   )
 }
 
-export function DocumentOutline({title}: {title: string}) {
+export function DocumentOutline({ editorRef }: { editorRef: React.RefObject<EditorJS> }) {
   const [headings, setHeadings] = useState<HeadingItem[]>([])
 
   useEffect(() => {
@@ -75,7 +81,6 @@ export function DocumentOutline({title}: {title: string}) {
         }
 
         const headingTree: HeadingItem[] = []
-        let stack: HeadingItem[] = []
         let currentChapter: HeadingItem | null = null
 
         blocks.forEach((block) => {
@@ -84,25 +89,22 @@ export function DocumentOutline({title}: {title: string}) {
             const chapterBreakBlock = block.querySelector('.chapter-break');
 
             if (chapterBreakBlock) {
-              // If a ChapterBreak is found, create a new heading item for it
-              const chapterTitle = chapterBreakBlock.querySelector('.chapter-break-title')?.innerHTML || 'Untitled Chapter';
+              const chapterTitle = chapterBreakBlock.querySelector('.chapter-break-text')?.innerHTML || 'Untitled Chapter';
               const chapterId = `chapter-${Math.random().toString(36).substr(2, 9)}`;
 
               currentChapter = {
                 id: chapterId,
                 text: chapterTitle,
-                level: 1, // Treat ChapterBreak as level 1
+                level: 1,
                 children: [],
                 isExpanded: true
               };
-
               headingTree.push(currentChapter);
-              return; // Skip to the next block
+              return;
             }
 
             if (!headerBlock) return;
 
-            // Safely get the level with a fallback
             const levelAttr = headerBlock.getAttribute('data-level');
             const level = levelAttr ? parseInt(levelAttr, 10) : 1;
             if (isNaN(level)) return;
@@ -110,7 +112,6 @@ export function DocumentOutline({title}: {title: string}) {
             const text = headerBlock.textContent || 'Untitled';
             const id = headerBlock.id || `heading-${Math.random().toString(36).substr(2, 9)}`;
             
-            // Ensure the header has an ID
             if (!headerBlock.id) {
               headerBlock.id = id;
             }
@@ -123,14 +124,12 @@ export function DocumentOutline({title}: {title: string}) {
               isExpanded: true
             };
 
-            // If there's a current chapter, push the heading into its children
             if (currentChapter) {
               currentChapter.children.push(heading);
             } else {
+                console.log("heading", heading);
               headingTree.push(heading);
             }
-
-            stack.push(heading);
           } catch (err) {
             console.error('Error processing header block:', err);
           }
@@ -150,14 +149,16 @@ export function DocumentOutline({title}: {title: string}) {
         const target = mutation.target as Node
         if (target instanceof Element) {
           if (target.classList?.contains('ce-header') || 
-              target.classList?.contains('ce-block')) {
+              target.classList?.contains('ce-block') || 
+              target.classList?.contains('chapter-break-text')) {
             return true
           }
         }
         
         const parentElement = target.parentElement
         if (parentElement?.classList?.contains('ce-header') || 
-            parentElement?.classList?.contains('ce-block')) {
+            parentElement?.classList?.contains('ce-block') || 
+            parentElement?.classList?.contains('chapter-break')) {
           return true
         }
         
@@ -165,7 +166,6 @@ export function DocumentOutline({title}: {title: string}) {
       })
       
       if (hasHeaderChanges) {
-        // Add a small delay to ensure DOM is updated
         setTimeout(buildHeadingTree, 100)
       }
     })
@@ -194,26 +194,28 @@ export function DocumentOutline({title}: {title: string}) {
   }
 
   return (
-    <aside className="w-64 bg-gray-100 border-r border-border h-full px-4 bg-background overflow-hidden">
+    <aside className="w-full h-full bg-background overflow-hidden">
       <div className="h-full">
-        <div className="h-full w-auto py-6 overflow-y-scroll scrollbar-hide">
+        <div className="h-full w-auto overflow-y-scroll scrollbar-hide overflow-x-hidden">
           <div className="w-full">
-            <h4 className="text-base font-bold mb-4 break-words">Table of Contents</h4>
-            <div className="space-y-1">
-              {headings.length > 0 ? (
-                headings.map((heading) => (
-                  <HeadingNode 
-                    key={heading.id} 
-                    heading={heading} 
-                    onSelect={scrollToHeading}
-                  />
-                ))
-              ) : (
-                <div className="text-sm text-muted-foreground py-1.5 px-2 break-words">
-                  No headings found
-                </div>
-              )}
-            </div>
+            <SidebarGroup>
+              <SidebarGroupLabel>Table of Contents</SidebarGroupLabel>
+              <SidebarMenu>
+                {headings.length > 0 ? (
+                  headings.map((heading) => (
+                    <HeadingNode 
+                      key={heading.id} 
+                      heading={heading} 
+                      onSelect={scrollToHeading}
+                    />
+                  ))
+                ) : (
+                  <div className="text-sm text-muted-foreground py-1.5 px-2 break-words">
+                    Empty... 🥺
+                  </div>
+                )}
+              </SidebarMenu>
+            </SidebarGroup>
           </div>
         </div>
       </div>

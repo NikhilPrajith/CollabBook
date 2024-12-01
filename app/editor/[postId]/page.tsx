@@ -1,8 +1,6 @@
 
 import { notFound, redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
-import { Editor } from "@/components/editor"
-import { DocumentOutline } from "@/components/document-outline"
 import EditPage from "@/components/editPage"
 
 export default async function EditorPage({ params }: { params: { postId: string } }) {
