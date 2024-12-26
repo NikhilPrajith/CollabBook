@@ -1,3 +1,4 @@
+'use server'
 import { signOutAction } from "@/app/actions";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
 import Link from "next/link";
@@ -64,7 +65,6 @@ export default async function AuthButton() {
         <MenubarMenu>
           <MenubarTrigger>
             <Avatar className="rounded-full overflow-hidden">
-              <AvatarImage src="https://github.com/shadcn.png" />
               <AvatarFallback>CN</AvatarFallback>
             </Avatar>
           </MenubarTrigger>

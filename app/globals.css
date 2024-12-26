@@ -1,6 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import 'swiper/css';
+@import 'swiper/css/navigation';
+@import 'swiper/css/pagination';
+
 
 @layer base {
   :root {
@@ -37,6 +41,13 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+
+    --swiper-navigation-color: white;
+    --swiper-theme-color: white;
+    --swiper-pagination-bullet-active-color: white;
+    --swiper-pagination-color: white;
+    --second-highlight-color:#4ADE80; /*green-400*/
+    --star-color: #4ADE80;
   }
 
   .dark {
@@ -72,6 +83,10 @@
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    --swiper-navigation-color: white;
+    --swiper-theme-color: white;
+    --swiper-pagination-bullet-active-color: white;
+    --swiper-pagination-color: white;
   }
 }
 
@@ -83,3 +98,14 @@
     @apply bg-background text-foreground;
   }
 }
+
+/* Slide styling */
+.custom-slide {
+  background-color: #1e293b;  /* Background of slides */
+  color: white;
+  border-radius: 8px;
+}
+
+
+
+

@@ -5,6 +5,10 @@ import { getCachedPosts } from "@/utils/cache";
 import Link from "next/link";
 
 import { Pencil } from "lucide-react";
+import TrendingCarousel from "@/components/trending-carousel";
+import BookCard from "@/components/BookCard";
+import DiscoverList from "@/components/discover-list";
+import { BookCardV2, BookCardV3 } from "@/components/BookCard";
 
 async function createPost() {
   "use server";
@@ -15,7 +19,6 @@ async function createPost() {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error("Not authenticated");
-
   const { data, error } = await supabase
     .from("posts")
     .insert([
@@ -23,6 +26,9 @@ async function createPost() {
         title: "Untitled",
         content: {},
         user_id: user.id,
+        rating: 0,
+        authors:[],
+        description:""
       },
     ])
     .select()
@@ -37,6 +43,7 @@ async function fetchPosts() {
     "use client";
     const supabase = await createClient();
     const { data: posts, error } = await supabase.from("posts").select("*");
+    console.log("data", posts)
   
     if (error) {
       throw new Error("Error fetching posts");
@@ -66,63 +73,54 @@ export default async function HomePage() {
     "bg-pink-100",
   ];
 
-
-
   return (
-    <div className="min-h-screen flex flex-col max-w-6xl mx-auto px-4">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">Dashboard</h1>
-        <Button onClick={createPost} className="px-8 py-4">
-          Create New Post
-        </Button>
+    <div className="flex max-h-lvh min-h-[600px] justify-center items-start mx-auto w-full relative">
+    <div className="h-full max-h-lvh overflow-y-scroll w-3/4 flex flex-col mx-auto px-8 mb-5 scrollbar-hide pb-28 mt-5">
+    <TrendingCarousel />
+    <div className="flex items-center justify-between mt-4">
+      <h1 className="text-base font-bold">Your Books</h1>
+      <Button onClick={createPost} variant="ghost" className="m-2 py-4 text-[var(--second-highlight-color)]">
+        Create
+      </Button>
+    </div>
+
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+      {books.map((book: Book) => (
+        <BookCard key={book.id} book={book} colors={colors} />
+      ))}
+    </div>
+
+    <div> 
+      <div className="flex items-center justify-between mt-4">
+        <h1 className="text-base font-bold">Discover popular categories</h1>
       </div>
+      <DiscoverList />
+    </div>
+    <div className="flex items-center justify-between mt-4 mb-4">
+      <h1 className="text-base font-bold">Bookmarks</h1>
+    </div>
+    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2">
+      {books.map((book: Book) => (
+        <BookCardV2 key={book.id} book={book} colors={colors} />
+      ))}
+    </div>
+  </div>
+  
+  <div className="w-1/4 h-full min-h-lvh flex flex-col border-l bg-[hsl(var(--sidebar-background))]">
+    <div className="h-full max-h-lvh overflow-y-scroll overflow-scroll">
+      <div className=" h-full rounded sticky top-0 flex-grow p-3">
+        <div className="font-semibold">Suggested</div>
+        <div className="text-gray-500 text-xs">Recommended books based on your style</div>
 
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-8">
-        {books.map((book: Book) => {
-          const filledStars = Math.floor(book.rating);
-          const emptyStars = 5 - filledStars;
-          const starDisplay = "★".repeat(filledStars) + "☆".repeat(emptyStars);
-
-          return (
-            <div key={book.id} className="rounded-xs p-4 flex">
-              {/* Book Image */}
-                <div className="relative w-[100px] h-[150px] perspective-1000">
-                    <div className="w-[100px] h-[150px] bg-gray-200 shadow-[10px_10px_20px_rgba(0,0,0,0.3),-5px_-5px_15px_rgba(0,0,0,0.1)] transform rotate-y-[15deg] rotate-x-[5deg] rounded-[4px]">
-                        {book.image ? <img
-                        src={book.image}
-                        alt={book.title}
-                        className="w-full h-full rounded-[4px] object-cover"
-                        />
-                            :
-                        <div 
-                        className={`${colors[Math.floor(Math.random() * colors.length)]} w-[100px] h-[150px] font-serif rounded-[4px] object-cover text-xs`}>
-                            <div className="font-semibold p-4 text-black">{book.title}</div>
-                        </div>}
-                    </div>
-                    <div className="absolute top-0 left-0 w-[2.5px] h-full bg-gray-500 rounded-l-[4px]"></div>
-                </div>
-
-              {/* Book Title and Author */}
-              <div className="w-auto pl-8">
-                {/* Rating Star */}
-                <div className="text-yellow-500">
-                  {starDisplay}
-                </div>
-                <h2 className="text-sm font-semibold">{book.title}</h2>
-                <p className="text-gray-400 mt-1 text-xs">{book.author}</p>
-                {/* Read Now Button */}
-                <Button className="mt-2 text-sm rounded-full border bg-white text-black border-black hover:bg-black hover:text-white">Read Now</Button>
-                {/* Edit Button */}
-                <Link href={`/editor/${book.id}`}>
-                  <Button className="mt-2 text-sm rounded-full border bg-black text-white border-black hover:bg-black hover:text-white">
-                    <Pencil className="" size={16} />
-                  </Button>
-                </Link>
-              </div>
-            </div>
-          );
-        })}
+    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-2 mt-4">
+        {books.map((book: Book) => (
+          <BookCardV3 key={book.id} book={book} colors={colors} />
+        ))}
+        </div>
       </div>
     </div>
+  </div>
+</div>
+
   );
 }

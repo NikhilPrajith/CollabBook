@@ -61,11 +61,11 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <Navbar />
-          <main className="h-auto">
-            {children}
-          </main>
-          <Footer />
+            <Navbar />
+            <main className="h-auto min-h-screen">
+              {children}
+            </main>
+            {/*<Footer />*/}
         </ThemeProvider>
       </body>
     </html>
