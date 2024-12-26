@@ -40,7 +40,7 @@ class ChapterBreak {
       
       const text = document.createElement('div');
       text.classList.add('chapter-break-text');
-      text.contentEditable = true;
+      text.contentEditable = true; // Set to read-only
       text.innerHTML = this.data.text;
       
       const line2 = document.createElement('div');

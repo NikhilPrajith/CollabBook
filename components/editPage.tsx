@@ -48,7 +48,7 @@ export default function EditPage({post}: {post: any}) {
   const toggleRightSidebar = () => setShowRightSidebar(!showRightSidebar);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    
+
     e.preventDefault();
     setIsSaving(true);
     console.log("testign submit")

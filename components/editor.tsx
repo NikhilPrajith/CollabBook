@@ -104,31 +104,6 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
               icon: '<svg width="16" height="14" xmlns="http://www.w3.org/2000/svg"><text transform="translate(-12 -9)" stroke="none" fill="currentColor" x="12" y="20" font-family="Helvetica" font-size="15">H3</text></svg>'
             }
           },
-          quote: {
-            class: Quote,
-            inlineToolbar: true,
-            config: {
-              quotePlaceholder: 'Enter a quote',
-              captionPlaceholder: 'Quote\'s author',
-            },
-            shortcut: 'CMD+SHIFT+Q',
-            toolbox: {
-              title: 'Quote',
-              icon: '<svg width="15" height="14" viewBox="0 0 15 14" xmlns="http://www.w3.org/2000/svg"><path d="M13.53 6.185l.027.025a1.109 1.109 0 0 1 0 1.568l-5.644 5.644a1.109 1.109 0 1 1-1.569-1.568l4.838-4.837L6.344 2.18A1.109 1.109 0 1 1 7.913.611l5.644 5.644a1.109 1.109 0 0 1-.027 1.93z" fill="currentColor"/></svg>'
-            }
-          },
-          image: {
-            class: ImageTool,
-            config: {
-              endpoints: {
-                byFile: '/api/upload-image',
-              },
-              captionPlaceholder: 'Image caption'
-            },
-            toolbox: {
-              title: 'Image'
-            }
-          },
           inlineCode: InlineCode,
           chapterBreak: {
             class: ChapterBreak,
@@ -142,8 +117,10 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
         inlineToolbar: ['bold', 'italic', 'inlineCode'],
         blockSettings: {
           enabled: false
-        }
+        },
+
       })
+      
     }
   }, [post.content])
 

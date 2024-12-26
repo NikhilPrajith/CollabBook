@@ -1,0 +1,57 @@
+.bookView {
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  width: 60%;
+  overflow-y: auto;
+  display: flex;
+  margin: auto;
+}
+
+.page {
+  page-break-after: always;
+  margin-bottom: 20px;
+  padding: 20px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.page:hover {
+  transform: scale(1.02);
+}
+
+.chapterBreak {
+  text-align: center;
+  margin: 20px 0;
+}
+
+.line {
+  border: none;
+  border-top: 2px solid #000; /* Adjust color and thickness as needed */
+  margin: 10px 0;
+}
+
+.chapterContent {
+  font-weight: bold; /* Make chapter text bold */
+  font-size: 1.5em; /* Adjust size as needed */
+}
+
+.chapter-break {
+    text-align: center;
+    margin: 20px 0;
+  }
+  
+  .chapter-break-line {
+    width: 100%;
+    height: 1px;
+    background-color: gray; /* Adjust color as needed */
+    margin: 10px 0;
+  }
+  
+  .chapter-break-text {
+    font-weight: bold; /* Make chapter text bold */
+    font-size: 1.5em; /* Adjust size as needed */
+  }
