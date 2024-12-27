@@ -44,9 +44,11 @@ const Reader: React.FC<ReaderProps> = ({ content, title }) => {
                   return true;
                 }
 
-                constructor({ data }) {
+                constructor({ data }: { data: { text: string } }) {
                   this.data = data;
                 }
+
+                private data: { text: string };
 
                 render() {
                   const wrapper = document.createElement('div');
@@ -69,7 +71,7 @@ const Reader: React.FC<ReaderProps> = ({ content, title }) => {
                   return wrapper;
                 }
 
-                save(blockContent) {
+                save(blockContent: HTMLElement) {
                   return {
                     text: this.data.text
                   }
