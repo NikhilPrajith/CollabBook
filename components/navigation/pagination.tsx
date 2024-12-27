@@ -1,4 +1,4 @@
-import Link from "next/link";
+/*import Link from "next/link";
 
 import { LuChevronLeft, LuChevronRight } from "react-icons/lu";
 import { getPreviousNext } from "@/lib/markdown";
@@ -33,3 +33,4 @@ export default function Pagination({ pathname }: { pathname: string }) {
     </div>
   );
 }
+*/
