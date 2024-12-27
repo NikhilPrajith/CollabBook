@@ -120,7 +120,7 @@ const creationList = [{
 export default async function Index() {
   return (
     <div className="w-full relative">
-      <div className="relative min-h-[600px] items-center text-center"
+      <div className="relative h-screen min-h-[600px] items-center text-center bg-center bg-cover"
           style={{ backgroundImage: `url('https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740819/jujutsu-kaisen-the-official-anime-guide-season-1-9781974740819_hr.jpg')` }}
       >
         
@@ -129,7 +129,7 @@ export default async function Index() {
           <div className="max-w-6xl mx-auto py-6 px-4 text-white">
             <h1 className="text-5xl font-bold mb-2 mt-20">The Trend</h1>
             <h2 className="text-3xl font-semibold mb-4">Tell Your Wonderful Stories</h2>
-            <p className="text-gray-500 mb-6">Feeling stuck collaborate with other to complete your masterpiece</p>
+            <p className="text-gray-500 mb-6">Feeling stuck? Collaborate with other to complete your masterpiece</p>
             
             <div className="max-w-2xl m-auto">
               <Input 
@@ -163,8 +163,9 @@ export default async function Index() {
         </div>
       </div>
       </div>
-
-      <TrendingCarouselV2 trendingCreations={trending}/>
+        <div className="overflow-x-hidden">
+        <TrendingCarouselV2 trendingCreations={trending}/>
+      </div>
       <Footer/>
     </div>
   );

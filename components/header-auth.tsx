@@ -60,7 +60,11 @@ export default async function AuthButton() {
     );
   }
   return user ? (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1 text-xs">
+        <span className="w-2 h-2 bg-[var(--second-highlight-color)] rounded-full"></span>
+        Online
+      </div>
       <Menubar className="border-none">
         <MenubarMenu>
           <MenubarTrigger>
