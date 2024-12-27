@@ -3,7 +3,11 @@ import { notFound, redirect } from "next/navigation"
 import { createClient } from "@/utils/supabase/server"
 import Reader from "@/components/read/reader"
 
-export default async function EditorPage({ params }: { params: { postId: string } }) {
+export default async function EditorPage({params,
+}: {
+  params: Promise<{ postId: string }>
+}) {
+  const postId = (await params).postId
   const supabase = await createClient()
 
   const { data: { user }, error: authError } = await supabase.auth.getUser()
@@ -14,7 +18,7 @@ export default async function EditorPage({ params }: { params: { postId: string 
   const { data: post, error } = await supabase
     .from('posts')
     .select('*')
-    .eq('id', params.postId)
+    .eq('id', postId)
     .single()
 
   if (error || !post) {

@@ -58,6 +58,10 @@ interface Book {
   title: string;
   author: string;
   image?: string;
+  description:string,
+  creatorName:string,
+  authors: { id: string; name: string }[];
+  category:string,
 }
 
 export default async function HomePage() {
@@ -112,7 +116,7 @@ export default async function HomePage() {
         <div className="font-semibold">Suggested</div>
         <div className="text-gray-500 text-xs">Recommended books based on your style</div>
 
-    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-2 mt-4">
+    <div className="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-1 gap-2 mt-4 pb-28">
         {books.map((book: Book) => (
           <BookCardV3 key={book.id} book={book} colors={colors} />
         ))}
