@@ -24,7 +24,7 @@ interface EditorProps {
   }
   onTitleChange: (title: string) => void
   onSubmit: (e: React.FormEvent) => void
-  ref: React.RefObject<EditorJS>
+  ref: React.MutableRefObject<EditorJS | undefined>
 }
 
 export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
@@ -50,7 +50,6 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
           ref.current = editor
         },
         placeholder: "Start your story...",
-        inlineToolbar: true,
         data: post.content && Object.keys(post.content).length > 0 
           ? post.content 
           : {
@@ -72,7 +71,7 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
             }
           },
           heading1: {
-            class: Header,
+            class: Header as any,
             config: {
               placeholder: 'Heading 1',
               levels: [2],
@@ -85,7 +84,7 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
             }
           },
           heading2: {
-            class: Header,
+            class: Header as any,
             config: {
               placeholder: 'Heading 2',
               levels: [3],
@@ -98,7 +97,7 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
             }
           },
           heading3: {
-            class: Header,
+            class: Header as any,
             config: {
               placeholder: 'Heading 3',
               levels: [4],
@@ -112,7 +111,7 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
           },
           inlineCode: InlineCode,
           chapterBreak: {
-            class: ChapterBreak,
+            class: ChapterBreak as any,
             config: {
               defaultText: 'Chapter One',
               allowEditing: true
@@ -121,9 +120,6 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
         },
         defaultBlock: 'paragraph',
         inlineToolbar: ['bold', 'italic', 'inlineCode'],
-        blockSettings: {
-          enabled: false
-        },
         onKeyDown: (e: KeyboardEvent) => {
           if (e.key === 'Tab') {
             e.preventDefault();

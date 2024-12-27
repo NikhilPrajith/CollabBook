@@ -37,7 +37,7 @@ export default function EditPage({post}: {post: any}) {
   const [showRightSidebar, setShowRightSidebar] = useState(true);
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false);
-  const ref = React.useRef<EditorJS | null>(null);
+  const ref = React.useRef<EditorJS>(null) as React.MutableRefObject<EditorJS | undefined>;
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
