@@ -9,6 +9,16 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/navigation/footer";
 import { Input } from "@/components/ui/input";
 
+interface Book {
+  id: number;
+  rating: number;
+  title: string;
+  description: string;
+  creatorName: string;
+  authors: { id: string; name: string }[];
+  image?: string;
+  category: string;
+}
 
 const trending = [
   {
@@ -48,74 +58,122 @@ const creationList = [{
   image: "https://images.beta.cosmos.so/f7fcb95d-981b-4cb3-897f-e35f6c20e830?format=jpeg",
   title: "Iron Flame",
   description: "A thrilling fantasy adventure featuring dragons and epic battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 1,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://images-platform.99static.com/WWeTfsyhi69xuCvwOh7Y_RBGZ_k=/2x418:971x1387/500x500/top/smart/99designs-contests-attachments/120/120397/attachment_120397084",
   title: "One Piece",
   description: "Join Luffy on his quest to become the Pirate King.",
-  category: "Drama"
+  category: "Drama",
+  id: 2,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740819/jujutsu-kaisen-the-official-anime-guide-season-1-9781974740819_hr.jpg",
   title: "Jujutsu Kaisen",
   description: "Dive into the world of cursed energy and fierce battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 3,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 
 {
   image: "https://images.beta.cosmos.so/f7fcb95d-981b-4cb3-897f-e35f6c20e830?format=jpeg",
   title: "Iron Flame",
   description: "A thrilling fantasy adventure featuring dragons and epic battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 4,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://images-platform.99static.com/WWeTfsyhi69xuCvwOh7Y_RBGZ_k=/2x418:971x1387/500x500/top/smart/99designs-contests-attachments/120/120397/attachment_120397084",
   title: "One Piece",
   description: "Join Luffy on his quest to become the Pirate King.",
-  category: "Drama"
+  category: "Drama",
+  id: 5,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740819/jujutsu-kaisen-the-official-anime-guide-season-1-9781974740819_hr.jpg",
   title: "Jujutsu Kaisen",
   description: "Dive into the world of cursed energy and fierce battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 6,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },{
   image: "https://images.beta.cosmos.so/f7fcb95d-981b-4cb3-897f-e35f6c20e830?format=jpeg",
   title: "Iron Flame",
   description: "A thrilling fantasy adventure featuring dragons and epic battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 7,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://images-platform.99static.com/WWeTfsyhi69xuCvwOh7Y_RBGZ_k=/2x418:971x1387/500x500/top/smart/99designs-contests-attachments/120/120397/attachment_120397084",
   title: "One Piece",
   description: "Join Luffy on his quest to become the Pirate King.",
-  category: "Drama"
+  category: "Drama",
+  id: 8,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740819/jujutsu-kaisen-the-official-anime-guide-season-1-9781974740819_hr.jpg",
   title: "Jujutsu Kaisen",
   description: "Dive into the world of cursed energy and fierce battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 9,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 
 {
   image: "https://images.beta.cosmos.so/f7fcb95d-981b-4cb3-897f-e35f6c20e830?format=jpeg",
   title: "Iron Flame",
   description: "A thrilling fantasy adventure featuring dragons and epic battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 10,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://images-platform.99static.com/WWeTfsyhi69xuCvwOh7Y_RBGZ_k=/2x418:971x1387/500x500/top/smart/99designs-contests-attachments/120/120397/attachment_120397084",
   title: "One Piece",
   description: "Join Luffy on his quest to become the Pirate King.",
-  category: "Drama"
+  category: "Drama",
+  id: 11,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 },
 {
   image: "https://d28hgpri8am2if.cloudfront.net/book_images/onix/cvr9781974740819/jujutsu-kaisen-the-official-anime-guide-season-1-9781974740819_hr.jpg",
   title: "Jujutsu Kaisen",
   description: "Dive into the world of cursed energy and fierce battles.",
-  category: "Drama"
+  category: "Drama",
+  id: 12,
+  rating: 0,
+  creatorName: "Anonymous",
+  authors: []
 }]
 export default async function Index() {
   return (
@@ -157,8 +215,10 @@ export default async function Index() {
         </div>
       <div className="flex flex-col m-2  w-1/3">
         <div className="grid grid-cols-3 gap-3">
-          {creationList.slice(6, 15).map((item: { image: string; title: string; description: string, category: string }, index: number) => (
-            <BookCardV4 key={index} book={item} />
+          {creationList.slice(6, 15).map((item, index) => (
+            <BookCardV4 key={index} book={{
+              ...item,
+            }} colors={[]} />
           ))}
         </div>
       </div>
