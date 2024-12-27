@@ -9,6 +9,7 @@ import 'swiper/css/effect-cards';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
+import { Book } from "@/app/page"
 
 const trending = [
   {
@@ -80,7 +81,7 @@ export default function TrendingCarousel() {
   )
 }
 
-export function TrendingCarouselV2({trendingCreations}) {
+export function TrendingCarouselV2({ trendingCreations }: { trendingCreations: { image: string; title: string; description: string }[] }) {
   return (
     <div className="w-full m-5">
       <Swiper
