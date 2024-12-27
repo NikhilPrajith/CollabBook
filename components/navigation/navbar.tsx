@@ -1,13 +1,10 @@
-import Link from "next/link";
 import { LuArrowUpRight, LuGithub } from "react-icons/lu";
 import { Logo } from "./logo";
 
 import { ModeToggle } from "@/components/navigation/theme-toggle";
 import { SheetLeft } from "@/components/navigation/sidebar";
-import Search from "@/components/navigation/search";
 import Anchor from "@/components/navigation/anchor";
 import { Navigations} from "@/settings/navigation";
-import { buttonVariants } from "@/components/ui/button";
 import AuthButton from "../header-auth";
 import { SheetClose } from "@/components/ui/sheet";
 
