@@ -10,12 +10,13 @@ import { Navigation, Pagination, Autoplay } from 'swiper/modules'
 import { Badge } from "./ui/badge"
 import { Button } from "./ui/button"
 import { BookCardV4 } from "./BookCard"
+import { Book } from "@/app/page"
 
 
-export default function CreationList({ creationList }) {
+export default function CreationList({ creationList }: { creationList: Book[] }) {
   return (
       <div className="flex flex-col m-2">
-        {creationList.slice(0, 5).map((item: { image: string; title: string; description: string, category: string }, index: number) => (
+        {creationList.slice(0, 5).map((item: Book, index: number) => (
           <div key={index} className=" p-2 flex items-start border-b">
             <img
               src={item.image}

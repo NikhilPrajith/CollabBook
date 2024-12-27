@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Footer } from "@/components/navigation/footer";
 import { Input } from "@/components/ui/input";
 
-interface Book {
+export interface Book {
   id: number;
   rating: number;
   title: string;
