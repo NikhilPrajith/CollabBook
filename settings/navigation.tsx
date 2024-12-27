@@ -10,7 +10,11 @@ export const Navigations = [
     href: "/dashboard",
   },
   {
-    title: "Docs",
-    href: "/docs",
+    title: "Explore",
+    href: "/explore",
+  },
+  {
+    title: "Buy Me A Coffee",
+    href: "/support",
   },
 ];

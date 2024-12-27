@@ -65,6 +65,12 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
               ]
             },
         tools: {
+          paragraph: {
+            config: {
+              preserveBlank: true,
+              placeholder: '        Press Tab to indent...'
+            }
+          },
           heading1: {
             class: Header,
             config: {
@@ -118,7 +124,18 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
         blockSettings: {
           enabled: false
         },
-
+        onKeyDown: (e: KeyboardEvent) => {
+          if (e.key === 'Tab') {
+            e.preventDefault();
+            const selection = window.getSelection();
+            if (selection?.focusNode?.parentElement?.classList.contains('ce-paragraph')) {
+              const paragraph = selection.focusNode.parentElement;
+              if (!paragraph.textContent?.startsWith('        ')) {
+                paragraph.textContent = '        ' + (paragraph.textContent || '');
+              }
+            }
+          }
+        }
       })
       
     }

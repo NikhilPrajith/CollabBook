@@ -18,12 +18,7 @@ export function Footer() {
         </p>
         {Company.branding !== false && (
           <div className="text-center hidden md:block">
-            <Image
-                src={Settings.siteicon}
-                alt={Company.name}
-                width={30}
-                height={30}
-            />
+            GW
           </div>
         )}
       </div>

@@ -40,9 +40,11 @@ const BookCard = ({ book, colors }: { book: Book; colors: string[] }) => {
             </div>
         </div>
         <div>
+        <Link href={`/read/${book.id}`}>
         <Button variant="outline" className="mt-2 font-xs w-full">
             Read Now
           </Button>
+          </Link>
           <Link href={`/editor/${book.id}`}>
             <Button variant="ghost" className="text-xs transition-opacity duration-200 opacity-100 mt-1 w-full">
                     Contribute
@@ -87,9 +89,12 @@ export const BookCardV2 = ({ book, colors }: { book: Book; colors: string[] }) =
             </div>
         </div>
         <div className="m-4 flex justify-center items-center">
+
+        <Link href={`/read/${book.id}`}>
         <Button variant="outline" className="mt-2 font-xs w-full">
             Read Now
           </Button>
+          </Link>
           <Link href={`/editor/${book.id}`}>
             <Button variant="ghost" className="text-xs transition-opacity duration-200 opacity-100 mt-1 w-full">
                     Contribute
@@ -129,6 +134,28 @@ export const BookCardV3 = ({ book, colors }: { book: Book; colors: string[] }) =
         </div>
       </Card>
     );
+};
+
+export const BookCardV4 = ({ book, colors }: { book: Book; colors: string[] }) => {
+  return (
+    <Card className="relative flex flex-row">
+      <div className="relative w-[150px] h-[150px] rounded-lg overflow-hidden">
+        <img
+            src="https://images.beta.cosmos.so/f7fcb95d-981b-4cb3-897f-e35f6c20e830?format=jpeg" // Temporary picture
+            alt={book.title}
+            className="h-full object-cover w-full absolute top-0 "
+        />
+        <div className="absolute flex justify-end flex-col bottom-0 left-0 right-0 top-0 mt-auto bg-black bg-opacity-70 p-4 transition-all"></div>
+        <div className="absolute w-full h-full z-40 flex flex-col justify-end items-start p-2">
+              <div className="text-[var(--star-color)] m-1 absolute top-0 right-0 text-xs">{book.rating | 0}★</div>
+            <h2 className="text-sm font-semibold line-clamp-1 transition-all duration-200 text-white">{book.title}</h2>
+            <div className="flex text-xs items-center text-white"> by<div className="text-[var(--second-highlight-color)] ml-1 mr-1">{book.creatorName || "Anonymous"}</div>
+              {book.authors && book.authors.length !=0 && <>+{book.authors.length}</>}
+            </div>
+          </div>
+      </div>
+    </Card>
+  );
 };
 
 export default BookCard; 
