@@ -120,18 +120,7 @@ export function Editor({ post, onTitleChange, onSubmit, ref }: EditorProps) {
         },
         defaultBlock: 'paragraph',
         inlineToolbar: ['bold', 'italic', 'inlineCode'],
-        onKeyDown: (e: KeyboardEvent) => {
-          if (e.key === 'Tab') {
-            e.preventDefault();
-            const selection = window.getSelection();
-            if (selection?.focusNode?.parentElement?.classList.contains('ce-paragraph')) {
-              const paragraph = selection.focusNode.parentElement;
-              if (!paragraph.textContent?.startsWith('        ')) {
-                paragraph.textContent = '        ' + (paragraph.textContent || '');
-              }
-            }
-          }
-        }
+
       })
       
     }
