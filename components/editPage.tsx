@@ -29,6 +29,8 @@ import { useToast } from "@/hooks/use-toast"
 import Link from 'next/link';
 
 import { useRouter } from "next/navigation"
+import { ReactSketchCanvas } from 'react-sketch-canvas';
+
   
 
 export default function EditPage({post}: {post: any}) {
@@ -38,6 +40,9 @@ export default function EditPage({post}: {post: any}) {
   const router = useRouter()
   const [isSaving, setIsSaving] = useState(false);
   const ref = React.useRef<EditorJS>(null) as React.MutableRefObject<EditorJS | undefined>;
+  const [isDrawing, setIsDrawing] = useState(false);
+  const canvasRef = React.useRef<any>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const handleTitleChange = (newTitle: string) => {
     setTitle(newTitle);
@@ -86,6 +91,11 @@ export default function EditPage({post}: {post: any}) {
     }
   };
 
+  const handleClickOutside = () => {
+    // Only handle click outside if Done button is clicked
+    // Remove this function if not needed elsewhere
+  };
+
   return (
     <SidebarProvider>
         <div className='relative'>
@@ -128,18 +138,87 @@ export default function EditPage({post}: {post: any}) {
           </div>
           
         </header>
-        <div className="flex flex-1 flex-col gap-4 p-4 overflow-y-auto w-auto h-auto">
-        <Editor
-                post={{
-                    id: post.id,
-                    title: title,
-                    content: post.content,
-                    published: post.published,
+        <div className="gap-4 p-4 overflow-y-auto w-auto h-auto relative"
+             onClick={handleClickOutside}>
+          {/* Permanent Canvas Display Area */}
+          <div className={cn(
+            "w-full mb-10 relative bg-muted rounded-lg overflow-hidden border transition-all duration-300",
+            isExpanded 
+              ? "fixed inset-4 z-50 max-w-[calc(100vh*0.707)] mx-auto left-0 right-0" // A4 proportion (1:√2)
+              : "h-[250px]"
+          )}>
+            <div className={cn(
+              'absolute top-0 left-0 m-4 bg-background/80 p-2 rounded-sm',
+              isExpanded && 'text-lg'
+            )}>Cover</div>
+            <ReactSketchCanvas
+              ref={canvasRef}
+              strokeWidth={4}
+              strokeColor="black"
+              width="100%"
+              height="100%"
+              style={{
+                borderRadius: '8px',
+                boxShadow: isExpanded ? '0 0 40px rgba(0,0,0,0.15)' : 'none',
+              }}
+              className={cn(
+                "cursor-pointer",
+                isExpanded && "bg-white"
+              )}
+              disabled={!isDrawing}
+            />
+            
+            {/* Overlay controls when drawing is active */}
+            {isDrawing && (
+              <div className="absolute top-4 right-4 space-x-2 z-10">
+                <Button 
+                  variant="secondary" 
+                  onClick={() => canvasRef.current?.clearCanvas()}>
+                  Clear
+                </Button>
+                <Button 
+                  variant="secondary" 
+                  onClick={() => canvasRef.current?.undo()}>
+                  Undo
+                </Button>
+                <Button 
+                  variant="default" 
+                  onClick={() => {
+                    setIsDrawing(false);
+                    setIsExpanded(false);
+                  }}>
+                  Done
+                </Button>
+              </div>
+            )}
+
+            {/* Click to edit overlay when not drawing */}
+            {!isDrawing && (
+              <div 
+                className="absolute inset-0 flex items-center justify-center bg-background/50 hover:bg-background/60 transition-colors cursor-pointer"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setIsDrawing(true);
+                  setIsExpanded(true);
                 }}
-                onTitleChange={handleTitleChange}
-                onSubmit={handleSubmit}
-                ref={ref}
-                />
+              >
+                <Button variant="secondary">Click to Draw Your Cover Page</Button>
+              </div>
+            )}
+          </div>
+
+          {/* Editor below the canvas */}
+          <Editor
+            post={{
+              id: post.id,
+              title: title,
+              content: post.content,
+              published: post.published,
+            }}
+            onTitleChange={handleTitleChange}
+            onSubmit={handleSubmit}
+            ref={ref}
+          />
         </div>
       </SidebarInset>
       <SidebarRight />
